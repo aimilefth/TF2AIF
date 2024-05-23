@@ -1,0 +1,4 @@
+input_framework: TF
+run_converter: True
+run_composer: True
+compose_native_TF: True

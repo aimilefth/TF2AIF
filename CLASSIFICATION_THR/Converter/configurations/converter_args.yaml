@@ -1,0 +1,10 @@
+IMAGE_NAME: aimilefth/tf2aif_converter
+MODEL_NAME: ResNet50_ImageNet_70_90_7_76GF_2_3
+TRAINED: True
+DATASET_NAME: ImageNet_val_100
+DATALOADER_NAME: resnet50_dataloader.py
+MODELS_PATH: ../models
+LOGS_PATH: ../logs
+DATASETS_PATH: ../datasets
+OUTPUTS_PATH: ../outputs
+DATALOADERS_PATH: ../dataloaders

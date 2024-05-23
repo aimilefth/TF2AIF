@@ -1,0 +1,61 @@
+FROM aimilefth/aate_container_templates:client
+
+
+# Install any packages in the requirements file
+ARG REQUIREMENTS_FILE_ARG=extra_pip_libraries_client.txt
+COPY ${REQUIREMENTS_FILE_ARG} ./
+RUN if [ -s ./${REQUIREMENTS_FILE_ARG} ]; then pip install -r ./${REQUIREMENTS_FILE_ARG}; fi
+# Remove the requirements file from the image
+RUN rm -f ./${REQUIREMENTS_FILE_ARG}
+
+# Define arguments
+ARG WORKING_DIR_ARG=/home/Documents
+ARG CLIENT_APP_ARG=client.py
+ARG BASE_CLIENT_APP_ARG=base_client.py
+ARG MY_CLIENT_APP_ARG=my_client.py
+ARG METRICS_SCRIPT_ARG=metrics_script.py
+ARG METRICS_OUTPUT_ARG=metrics.json
+ARG LOG_CONFIG_ARG=logconfig.ini
+ARG LOG_FILE_ARG=client_logs.log
+ARG MOUNTED_DIR_ARG=mounted_dir
+
+ARG SERVER_IP_ARG=0.0.0.0
+ARG SERVER_PORT_ARG=3000
+ARG DATASET_ARG
+ARG DATASET_SIZE_ARG
+ARG OUTPUT_ARG
+
+# Environmental Variables
+ENV CLIENT_APP=${CLIENT_APP_ARG}
+ENV METRICS_SCRIPT=${METRICS_SCRIPT_ARG}
+ENV METRICS_OUTPUT=${METRICS_OUTPUT_ARG}
+ENV LOG_CONFIG=${LOG_CONFIG_ARG}
+ENV LOG_FILE=${LOG_FILE_ARG}
+ENV MOUNTED_DIR=${MOUNTED_DIR_ARG}
+
+ENV SERVER_IP=${SERVER_IP_ARG}
+ENV SERVER_PORT=${SERVER_PORT_ARG}
+ENV DATASET=${DATASET_ARG}
+ENV DATASET_SIZE=${DATASET_SIZE_ARG}
+ENV OUTPUT=${OUTPUT_ARG}
+ENV NUMBER_OF_REQUESTS=100
+
+# Copy files from the local filesystem to the working directory in the Docker image
+RUN mkdir -p ${WORKING_DIR_ARG}
+RUN chmod -R 777 ${WORKING_DIR_ARG}
+COPY ${DATASET_ARG} ${WORKING_DIR_ARG}
+COPY ${CLIENT_APP_ARG} ${WORKING_DIR_ARG}
+COPY ${BASE_CLIENT_APP_ARG} ${WORKING_DIR_ARG}
+COPY ${MY_CLIENT_APP_ARG} ${WORKING_DIR_ARG}
+COPY ${METRICS_SCRIPT_ARG} ${WORKING_DIR_ARG}
+COPY ${LOG_CONFIG_ARG} ${WORKING_DIR_ARG}
+WORKDIR ${WORKING_DIR_ARG}
+
+# Expose the server port
+EXPOSE ${SERVER_PORT_ARG}
+
+# The command to run when the container is started
+# CMD python3 ${CLIENT_APP}
+# Currently, the container runs indefinitely until manually stopped
+# CMD sleep infinity
+CMD bash

@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Leftheriotis
+    given-names: Aimilios
+  - family-names: Tzenetopoulos
+    given-names: Achilleas
+  - family-names: Lentaris
+    given-names: George
+  - family-names: Soudris
+    given-names: Dimitrios
+  - family-names: Theodoridis
+    given-names: Georgios
+title: "TF2AIF: Facilitating development and deployment of accelerated AI models on the cloud-edge continuum"
+version: "1.0"
+doi: 10.48550/arXiv.2404.13715
+date-released: 2024-04-10
+url: https://arxiv.org/abs/2404.13715

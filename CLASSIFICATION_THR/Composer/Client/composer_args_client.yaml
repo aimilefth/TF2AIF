@@ -1,0 +1,5 @@
+SERVER_IP_ARG: 0.0.0.0
+SERVER_PORT_ARG: 3000
+DATASET_ARG: ImageNet_val_folder_100_no_compression_images.zip
+DATASET_SIZE_ARG: 100
+OUTPUT_ARG: output.json
