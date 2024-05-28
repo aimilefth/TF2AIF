@@ -30,18 +30,22 @@ Each AI-framework/platform pair has its own subdirectory, which contains the fol
 
 ## Building Docker Images
 
-Each subdirectory contains a Dockerfile that defines the Docker image for the conversion process. To build the Docker image for a specific AI-framework/platform pair, navigate to the appropriate directory and run:
+Each subdirectory contains a Dockerfile that defines the Docker image for the conversion process. All the converter images are already built and available in the [aimilefth/tf2aif_converter DockerHub repository](https://hub.docker.com/repository/docker/aimilefth/tf2aif_converter/general). However, if you need to rebuild any of the Docker converters, follow the `README.md` file in the appropriate subdirectory (e.g., `AGX/TF/`) and use the build command provided there. Ensure you change the name of the Docker image to reflect your custom image name.
+
+### Example
+
+As described in the [Converter/code/AGX/TF/README.md](src/Converter/code/AGX/TF/README.md), after navigating to the appropriate subdirectory (e.g., AGX/TF/), the Docker image can be built using the following command:
 
 ```shell
-docker build -f ./Dockerfile --platform linux/amd64 --tag <your_docker_image_tag> .
+docker buildx build -f ./Dockerfile --platform linux/amd64 --tag aimilefth/tf2aif_converter:tf_agx --push .
 ```
 
-For example, to build the Docker image for TensorFlow on the AGX platform:
+To rebuild the image with a custom name, you would modify the command as follows:
 
 ```shell
-cd AGX/TF
-docker build -f ./Dockerfile --platform linux/amd64 --tag aimilefth/tf2aif_converter:tf_agx .
+docker buildx build -f ./Dockerfile --platform linux/amd64 --tag your_dockerhub_username/custom_image_name:tf_agx --push .
 ```
+
 ## Running Conversions
 
 To run the conversion for a specific AI-framework/platform pair, execute the corresponding script in the converters directory. For example, for AGX:

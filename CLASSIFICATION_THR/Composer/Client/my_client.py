@@ -23,39 +23,62 @@ Contributors:
 - Achilleas Tzenetopoulos
 """
 
-
 import os
 import time
-import cv2
-import numpy as np
-import requests
 import json
+import requests
 import base_client
 
 class MyClient(base_client.BaseClient):
+    """
+    Client class for sending images for inference to a server and handling the server's response.
+    Inherits from BaseClient and implements methods specific to this usage.
+    """
     def __init__(self, address):
+        """Initialize the MyClient instance with an address to connect to."""
         super().__init__(address)
     
     def send_request(self, url, dataset_path):
-        """Defines how the request is sent to the server."""
-        # Opening the dataset from the provided path in binary read mode
+        """
+        Defines how the request is sent to the server.
+        Encodes the dataset from the provided path and sends a POST request to the server.
+
+        Parameters:
+        - url (str): The URL to send the POST request to.
+        - dataset_path (str): The path to the dataset file.
+
+        Returns:
+        - response: The server's response.
+        - latency_s (float): The time taken to get the response in seconds.
+        """
+        # Open the dataset from the provided path in binary read mode
         with open(dataset_path, 'rb') as file:
             fileobj = file.read()
-        # Setting the headers for the POST request
+        
+        # Set the headers for the POST request
         headers = {'Content-Type': 'application/zip'}
-        # Sending the POST request with the dataset attached as a file to the provided URL
+        
+        # Send the POST request with the dataset attached as a file to the provided URL
         start = time.time()
         response = requests.post(url, data=fileobj, headers=headers)
         end = time.time()
-        # Checking if the server returned a successful response
+        
+        # Check if the server returned a successful response
         if response.status_code != 200:
             raise Exception(f'Inference request failed with status code {response.status_code}')
-        # Calculating the latency in seconds
-        latency_s = (end-start)
+        
+        # Calculate the latency in seconds
+        latency_s = end - start
         return response, latency_s
 
     def manage_response(self, response):
-        """Defines how the server's response is handled."""
+        """
+        Defines how the server's response is handled.
+        Decodes the server's response to retrieve the desired output and saves the output to a file.
+
+        Parameters:
+        - response: The server's response.
+        """
         response_data = json.loads(response.content)
         with open(self.output, 'w') as outfile:
             outfile.write(json.dumps(response_data, indent=4))

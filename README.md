@@ -4,6 +4,51 @@
 
 TF2AIF is a comprehensive tool designed to facilitate the conversion and deployment of AI models across various hardware platforms. It encompasses both conversion of models to different formats and orchestration of inference servers. This repository provides all the necessary scripts, configuration files, and Dockerfiles to streamline these processes.
 
+## Installation
+
+TF2AIF is fully containerized, simplifying the installation process. It has been tested on Ubuntu 18.04 and Ubuntu 20.04 systems. However, it should work on any Linux OS with support for Docker and Docker Buildx. To get started, follow these steps:
+
+1. **Install Docker**:
+   - Follow the official Docker installation guide for your operating system: [Docker Installation Guide](https://docs.docker.com/engine/install/)
+
+2. **Enable Docker Buildx**:
+   - [Docker Buildx](https://github.com/docker/buildx) is required for building multi-platform images. Enable Docker Buildx by following the instructions below:
+   - We recommend using the [manual download](https://github.com/docker/buildx#manual-download) instructions to set up Buildx as the default builder.
+
+3. **Set Up a Multi-platform Builder**:
+   - Create a Docker Buildx builder that supports both `linux/amd64` and `linux/arm64` architectures and set it as the default builder. The script below automates this process:
+
+      ```bash
+      #!/bin/bash
+
+      # Check if Docker Buildx is installed
+      if ! docker buildx version > /dev/null 2>&1; then
+         echo "Docker Buildx is not installed. Please install Docker Buildx first."
+         exit 1
+      fi
+
+      # Remove existing builder instance if it exists
+      docker buildx rm multiplat_builder 2>/dev/null || true
+
+      # Create a new builder instance with required architectures
+      docker buildx create --name multiplat_builder --driver docker-container --use --platform linux/amd64,linux/arm64
+
+      # Inspect the builder instance
+      docker buildx inspect --bootstrap
+
+      # Enable the builder as default
+      docker buildx use multiplat_builder
+      ```
+
+4. **Verify Docker and Buildx Installation**:
+    - Run the following commands to verify that Docker and Buildx are correctly installed and configured:
+
+      ```bash
+      docker --version
+      docker buildx version
+      docker buildx ls
+      ```
+
 ## Directory Structure
 
 ### src

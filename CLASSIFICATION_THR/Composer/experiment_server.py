@@ -66,18 +66,6 @@ class BaseExperimentServer(base_server.BaseServer):
         self.experiment_configs['image_size'] = (224, 224)
         self.experiment_configs['image_shape'] = (self.server_configs['BATCH_SIZE'], 224, 224, 3)
         
-    def send_response(self, encoded_output):
-        """
-        Sends a HTTP response with the encoded output.
-        
-        Args:
-            encoded_output: The encoded output to be sent in the response.
-        
-        Returns:
-            Response: Flask Response object with the encoded output.
-        """
-        return Response(response=json.dumps(encoded_output), status=200, mimetype="application/json")
-    
     def decode_input(self, indata):
         """
         Decodes input data from the request.
@@ -207,3 +195,16 @@ class BaseExperimentServer(base_server.BaseServer):
         
         encoded_output = out_dict
         return encoded_output
+        
+    def send_response(self, encoded_output):
+        """
+        Sends a HTTP response with the encoded output.
+        
+        Args:
+            encoded_output: The encoded output to be sent in the response.
+        
+        Returns:
+            Response: Flask Response object with the encoded output.
+        """
+        return Response(response=json.dumps(encoded_output), status=200, mimetype="application/json")
+    

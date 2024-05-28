@@ -37,6 +37,7 @@ import json
 import logging
 
 class BaseClient:
+    """Abstract base class for a client application to communicate with a server running AI tasks."""
     def __init__(self, address):
         self.address = address
         self.output = os.environ['OUTPUT']
@@ -44,12 +45,6 @@ class BaseClient:
     def send_request(self, url, dataset_path):
         """Defines how the request is sent to the server. Must be overridden by my_client.py (MyClient)."""
         raise AssertionError('Forgot to overload send_request. Must be overridden by my_client.py (MyClient).')
-        # start = time.perf_counter()
-        # code
-        # end = time.perf_counter()
-        # latency_s = end-start
-        # return response, latency_s
-
 
     def manage_response(self, response):
         """Defines how the server's response is handled. Must be overridden by my_client.py (MyClient)."""
@@ -62,26 +57,20 @@ class BaseClient:
         dataset_size = int(os.environ['DATASET_SIZE'])
         logging.info('E2E Latency :\t {:.2f} ms'.format(latency_s*1000))
         logging.info('Throughput  :\t {:.2f} fps'.format(dataset_size/latency_s))
-        # Handle the response from the server
         self.manage_response(response)
 
     def ask_metrics(self, number_of_metrics):
         """Sends a request for performance metrics to the server and outputs them in a structured manner."""
         url = self.address + '/api/metrics'
-        # Preparing headers for the HTTP request
         content_type = 'application/json'
         headers = {'content-type': content_type}
         # Decide the payload based on number_of_metrics
-        if(number_of_metrics == -1):
-            json_input = {'all':'True', 'number':-1}
-        else:
-            json_input = {'all':'False', 'number':number_of_metrics}
+        json_input = {'all': 'True', 'number': -1} if number_of_metrics == -1 else {'all': 'False', 'number': number_of_metrics}
         start = time.perf_counter()
         # Sending the HTTP POST request with the prepared payload
         response = requests.post(url, json=json_input, headers=headers)
         end = time.perf_counter()
         logging.info('Get Metrics Latency: {:.2f} ms'.format((end-start)*1000))
-        # Parsing and printing the JSON response
         metrics_json = response.json()
         self.pp_json(json_thing=metrics_json, sort=False)
         # Writing the JSON data to an output file

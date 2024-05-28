@@ -46,7 +46,7 @@ fi
 IMAGE="${image_name}:${image_app}_${device_lower_case}"
 
 # Check if the Docker image can be pulled
-if ! docker pull "$IMAGE" > /dev/null 2>&1; then
+if ! docker pull "$IMAGE"; then
     echo "Error: Image '$IMAGE' cannot be pulled from the remote repository."
     exit 1
 fi

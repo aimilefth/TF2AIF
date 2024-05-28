@@ -28,7 +28,6 @@ Contributors:
 - Aimilios Leftheriotis
 - Achilleas Tzenetopoulos
 """
-# Actual code starts here...
 
 import argparse
 import os
@@ -37,30 +36,30 @@ import logging
 import logging.config
 
 def strtobool(bool_str):
-    my_bool = bool_str.lower() in ['true', 'yes', 'y']
-    return my_bool
+    """Convert a string representation of truth to true (1) or false (0)."""
+    return bool_str.lower() in ['true', 'yes', 'y']
 
 def main():
-    # Construct the argument parser and parse the arguments
+    """Main function to run the client application based on command line arguments."""
     ap = argparse.ArgumentParser()
     default_dataset_path = os.environ['DATASET']
     default_address = 'http://' + os.environ['SERVER_IP'] + ':' + os.environ['SERVER_PORT']
-    ap.add_argument('-d', '--dataset_path',      type=str, default=default_dataset_path, help='Path of Dataset. Default is given from DATASET environmental variable')
-    ap.add_argument('-a', '--address',           type=str, default=default_address, help='Address to connect to. Default is given from SERVER_IP and SERVER_PORT environmental variables')
-    ap.add_argument('-m', '--ask_metrics',       type=str, default='False', help='Whether to ask for metrics instead of inference. Default is False')
+    ap.add_argument('-d', '--dataset_path', type=str, default=default_dataset_path, help='Path of Dataset. Default is given from DATASET environmental variable')
+    ap.add_argument('-a', '--address', type=str, default=default_address, help='Address to connect to. Default is given from SERVER_IP and SERVER_PORT environmental variables')
+    ap.add_argument('-m', '--ask_metrics', type=str, default='False', help='Whether to ask for metrics instead of inference. Default is False')
     ap.add_argument('-n', '--number_of_metrics', type=int, default=-1, help='Number of metrics to get. -1 translates to all. Default is -1 (all)')
     args = ap.parse_args()
 
-    # Configure logging based on the environmental variable 'LOG_CONFIG'
     logging.config.fileConfig(os.environ['LOG_CONFIG'], disable_existing_loggers=False)
 
-    logging.info(' Command line options:')
+    logging.info('Command line options:')
     logging.info('--dataset_path      : {}'.format(args.dataset_path))
     logging.info('--address           : {}'.format(args.address))
     logging.info('--ask_metrics       : {}'.format(args.ask_metrics))
     logging.info('--number_of_metrics : {}'.format(args.number_of_metrics))
+
     client = my_client.MyClient(args.address)
-    if(strtobool(args.ask_metrics)):
+    if strtobool(args.ask_metrics):
         client.ask_metrics(args.number_of_metrics)
     else:
         client.ask_inference(args.dataset_path)

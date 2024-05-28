@@ -1,0 +1,10 @@
+IMAGE_NAME: aimilefth/tf2aif_converter
+MODEL_NAME: UNET_v3_78.61GF_2.3.0
+TRAINED: True
+DATASET_NAME: img_train
+DATALOADER_NAME: semseg_dataloader.py
+MODELS_PATH: ../models
+LOGS_PATH: ../logs
+DATASETS_PATH: ../datasets
+OUTPUTS_PATH: ../outputs
+DATALOADERS_PATH: ../dataloaders

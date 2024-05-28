@@ -9,14 +9,41 @@ These images are optimized for different frameworks for platforms such as AGX, A
 
 ## Build Instructions 
 
-Each sub-directory contains its own Dockerfile and build script. Each build script executes a simple docker build buildx command. To build and push a Docker image for a particular platform, navigate to the appropriate directory and execute the `docker_build.sh` script. Here is an example:
+All the images are already built and available in the [aimilefth/aate_container_templates DockerHub repository](https://hub.docker.com/repository/docker/aimilefth/aate_container_templates/general). However, if you need to rebuild any of the templates or add a new base container image, follow these instructions:
+
+### Rebuilding a Base Container Image
+
+1. **Navigate to the appropriate directory**:
+   Each sub-directory contains its own `Dockerfile` and build script. To build and push a Docker image for a particular platform, navigate to the appropriate directory. For example:
 
 ```shell
 cd AGX
+```
+
+2. **Modify the `docker_build.sh` script**:
+    Change the docker image name inside the `docker_build.sh` script to reflect your custom image name. For example:
+
+```bash
+docker buildx build -f ./Dockerfile --platform linux/arm64 --tag your_dockerhub_username/custom_image_name:agx --push .
+```
+
+3. **Execute the build script**:
+    Run the modified docker_build.sh script to build and push the Docker image to your Docker registry.
+
+```shell
 bash docker_build.sh
 ```
 
-Otherwise, you can use the docker_build_all.sh script that builds all the images for all platforms.
+4. Update Dockerfiles used in Composer flow:
+    If you change the name of the base container image, ensure that you update the names of the Dockerfiles used in the Composer flow to match your new base container images. For example, if you change the AGX base container image, update the FROM directive in the [Dockerfile.agx example](src/Composer/AGX/Dockerfile.agx) as follows:
+
+```dockerfile
+FROM your_dockerhub_username/custom_image_name:agx
+```
+
+### Building All Images
+
+Alternatively, you can use the docker_build_all.sh script to build all the images for all platforms. Ensure you have updated the script to reflect your custom image names if necessary.
 
 ## Hardware Platforms
 
